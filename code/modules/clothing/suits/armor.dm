@@ -46,6 +46,14 @@
 	flags_inv = 0
 	strip_delay = 80
 
+/obj/item/clothing/suit/armor/hos/tasald
+	name = "tasald jacket"
+	desc = "A jacket in exceptional finery. If they will not serve on the front, then they'll serve in permabrig!"
+	icon_state = "tasald"
+	item_state = "tasald"
+	flags_inv = 0
+	strip_delay = 80
+
 
 /obj/item/clothing/suit/armor/vest/warden
 	name = "warden's jacket"
@@ -221,3 +229,15 @@
 	desc = "Pukish armor."	//classy.
 	icon_state = "tdgreen"
 	item_state = "tdgreen"
+
+/obj/item/clothing/suit/armor/viking
+	name = "viking garb"
+	desc = "TO VALHALLA!"
+	icon_state = "viking_garb"
+	item_state = "viking_garb"
+	armor = list(melee = 60, bullet = 60, laser = 50, energy = 30, bomb = 50, bio = 0, rad = 0)
+	body_parts_covered = CHEST|GROIN|ARMS
+	cold_protection = CHEST|GROIN|ARMS
+	heat_protection = CHEST|GROIN|ARMS
+	strip_delay = 80
+	flags = THICKMATERIAL

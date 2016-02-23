@@ -8,8 +8,11 @@
 	mob_size = MOB_SIZE_LARGE
 	layer = 6
 	pressure_resistance = 200 //Because big, stompy xenos should not be blown around like paper.
-	butcher_results = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno = 20, /obj/item/stack/sheet/animalhide/xeno = 3)
-
+	butcher_results = list(/obj/item/weapon/xeno_skull/q = 1,
+	/obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno = 20,
+	/obj/item/stack/sheet/animalhide/xeno = 5,
+	/obj/item/weapon/xenos_tail = 1,
+	/obj/item/weapon/xenos_claw = 2)
 	var/alt_inhands_file = 'icons/mob/alienqueen.dmi'
 
 /mob/living/carbon/alien/humanoid/royal/queen
@@ -18,7 +21,6 @@
 	maxHealth = 400
 	health = 400
 	icon_state = "alienq"
-
 
 /mob/living/carbon/alien/humanoid/royal/queen/New()
 	//there should only be one queen
@@ -38,6 +40,7 @@
 	internal_organs += new /obj/item/organ/internal/alien/eggsac
 	AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/repulse/xeno(src))
 	AddAbility(new/obj/effect/proc_holder/alien/royal/queen/promote())
+	AddAbility(new/obj/effect/proc_holder/alien/royal/queen/screech())
 	..()
 
 /mob/living/carbon/alien/humanoid/royal/queen/handle_hud_icons_health()
@@ -63,8 +66,9 @@
 
 /mob/living/carbon/alien/humanoid/royal/queen/movement_delay()
 	. = ..()
-	. += 5
-
+	. += 4
+	if(locate(/obj/structure/alien/weeds) in src.loc)
+		. += -1
 
 //Queen verbs
 /obj/effect/proc_holder/alien/lay_egg
@@ -79,6 +83,7 @@
 		user << "There's already an egg here."
 		return 0
 	user.visible_message("<span class='alertalien'>[user] has laid an egg!</span>")
+	playsound(user.loc, pick('sound/alien/Effects/resin1.ogg', 'sound/alien/Effects/resin2.ogg', 'sound/alien/Effects/resin3.ogg', 'sound/alien/Effects/resin4.ogg'), 100, 1)
 	new /obj/structure/alien/egg(user.loc)
 	return 1
 
@@ -146,3 +151,26 @@
 /obj/item/queenpromote/attack_self(mob/user)
 	user << "<span class='noticealien'>You discard [src].</span>"
 	qdel(src)
+
+/obj/effect/proc_holder/alien/royal/queen/screech
+	name = "Screech"
+	desc = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	action_icon_state = "alien_screech"
+	plasma_cost = 350
+
+/obj/effect/proc_holder/alien/royal/queen/screech/fire(mob/living/carbon/alien/humanoid/royal/queen/user)
+	user.visible_message("<span class='alertalien'>[user] emits an ear-splitting screech!!</span>")
+	playsound(user.loc, 'sound/voice/screech.ogg', 200, 0, 64)
+	for(var/mob/living/M in get_hearers_in_view(4, user))
+		if(ishuman(M))
+			M.confused += 6
+			M.Jitter(rand(5,10))
+			M.Weaken(rand(2,3))
+			shake_camera(M, 3, strength=2)
+		else if(issilicon(M))
+			M << sound('sound/weapons/flash.ogg')
+			M.Weaken(rand(2,5))
+	for(var/obj/machinery/light/L in range(7, user))
+		L.on = 1
+		L.broken()
+	return 1

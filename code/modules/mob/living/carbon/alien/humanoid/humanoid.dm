@@ -9,10 +9,22 @@
 	var/alt_icon = 'icons/mob/alienleap.dmi' //used to switch between the two alien icon files.
 	var/leap_on_click = 0
 	var/pounce_cooldown = 0
-	var/pounce_cooldown_time = 30
+	var/pounce_cooldown_time = 50
 	var/custom_pixel_x_offset = 0 //for admin fuckery.
 	var/custom_pixel_y_offset = 0
 	var/sneaking = 0 //For sneaky-sneaky mode and appropriate slowdown
+	var/footstep = 1
+
+/mob/living/carbon/alien/humanoid/Move(NewLoc, direct)// Footstep sounds
+	. = ..()
+	if(health > 0 && !resting && !sleeping && !paralysis && !sneaking && !leaping && has_gravity(src) && !buckled) //If you're sneaking you're quiet too.
+		if(footstep > 0 && src.loc == NewLoc)
+			playsound(src.loc, pick('sound/alien/Effects/step1.ogg', 'sound/alien/Effects/step2.ogg', 'sound/alien/Effects/step3.ogg', 'sound/alien/Effects/step4.ogg', 'sound/alien/Effects/step5.ogg', 'sound/alien/Effects/step6.ogg', 'sound/alien/Effects/step7.ogg'), 25, 0, 0)
+			footstep = 0
+		else if(src.loc == NewLoc)
+			footstep++
+	else
+		return
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
 /mob/living/carbon/alien/humanoid/New()
@@ -22,7 +34,9 @@
 
 /mob/living/carbon/alien/humanoid/movement_delay()
 	. = ..()
-	. += move_delay_add + config.alien_delay + sneaking	//move_delay_add is used to slow aliens with stuns
+	. += move_delay_add + config.alien_delay + sneaking - crawling //move_delay_add is used to slow aliens with stuns
+	if(src.pulling)
+		. += 1
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(r_store) r_store.emp_act(severity)
@@ -35,7 +49,6 @@
 		adjustBruteLoss(14 + rand(1,9))
 		var/hitverb = "punched"
 		if(mob_size < MOB_SIZE_LARGE)
-			Paralyse(1)
 			step_away(src,user,15)
 			sleep(1)
 			step_away(src,user,15)
@@ -124,7 +137,7 @@
 				unEquip(l_store)
 
 /mob/living/carbon/alien/humanoid/cuff_resist(obj/item/I)
-	playsound(src, 'sound/voice/hiss5.ogg', 40, 1, 1)  //Alien roars when starting to break free
+	playsound(src, 'sound/alien/Voice/screech1.ogg', 100, 1, 1)  //Alien roars when starting to break free
 	..(I, cuff_break = 1)
 
 /mob/living/carbon/alien/humanoid/get_standard_pixel_y_offset(lying = 0)
@@ -158,3 +171,13 @@ proc/alien_type_present(var/alienpath)
 			continue
 		return 1
 	return 0
+
+/turf/simulated/wall/attack_alien(mob/user)
+	if(isalienadult(user))
+		user.do_attack_animation(src)
+		visible_message("<span class='notice'>[user.name] smashes against [src].</span>")
+		playsound(src, pick('sound/alien/Effects/bang1.ogg', 'sound/alien/Effects/bang2.ogg', 'sound/alien/Effects/bang3.ogg', 'sound/alien/Effects/bang4.ogg', 'sound/alien/Effects/bang5.ogg', 'sound/alien/Effects/bang6.ogg', 'sound/alien/Effects/bang7.ogg', 'sound/alien/Effects/bang8.ogg'), 100, 0, 0)
+		user.changeNext_move(CLICK_CD_MELEE)
+		return
+	else
+		return

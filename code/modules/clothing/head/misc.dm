@@ -160,7 +160,7 @@
 	item_state = "bearpelt"
 
 /obj/item/clothing/head/xenos
-	name = "xenos helmet"
+	name = "xenos hat"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
 	desc = "A helmet made out of chitinous alien hide."
@@ -233,3 +233,9 @@
 	name = "rice hat"
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
+
+/obj/item/clothing/head/hunter
+	name = "hunter's hat"
+	desc = "A fashionable wide-brimmed hat. Blood sticks to it easily."
+	icon_state = "hunter"
+	item_state = "hunter"

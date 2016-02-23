@@ -44,3 +44,13 @@
 	desc = "A Deagle brand Deagle for operators operating operationally. Uses .50 AE ammo."
 	icon_state = "deaglecamo"
 	item_state = "deagleg"
+
+/obj/item/weapon/gun/projectile/automatic/pistol/secpistol
+	name = "\improper M95 pistol"
+	desc = "An aging firearm that fires 9mm rounds. Good for civilian, security, and military use."
+	icon_state = "secpistol"
+//	pin = /obj/item/device/firing_pin/implant/loyalty
+	w_class = 3
+	origin_tech = "combat=2;materials=2"
+	mag_type = /obj/item/ammo_box/magazine/m9mm
+	can_suppress = 0

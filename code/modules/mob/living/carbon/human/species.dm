@@ -225,6 +225,10 @@
 
 	var/list/standing	= list()
 
+	if(id!="human")
+		standing += generate_colour_icon('icons/mob/human.dmi',"[H.base_icon_state]_s",H.dna.special_color,add_layer=-BODY_LAYER,overlay_only=1)
+
+
 	handle_mutant_bodyparts(H)
 
 	// lipstick
@@ -873,7 +877,10 @@
 ////////////////
 
 /datum/species/proc/movement_delay(mob/living/carbon/human/H)
-	. = 0
+	. = 1 - H.sizeplay_size / 3
+	if(H.sizeplay_size > 3)
+		. = 0
+
 
 	if(!(H.status_flags & IGNORESLOWDOWN))
 
@@ -968,7 +975,9 @@
 				if(H.lying)
 					atk_verb = "kick"
 
-				var/damage = rand(0, 9) + M.dna.species.punchmod
+				var/damage = (rand(0, 9) + M.dna.species.punchmod) * H.sizeplay_size / 3
+				if(H.sizeplay_size > 3)
+					damage = rand(0, 9) + M.dna.species.punchmod
 
 				if(H.stat==DEAD && damage >= 4)
 					if(H.stomach_contents.len)

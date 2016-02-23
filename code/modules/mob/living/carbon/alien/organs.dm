@@ -41,6 +41,9 @@
 	var/heal_rate = 5
 	var/plasma_rate = 10
 
+/obj/item/organ/internal/alien/plasmavessel/sentinel
+	alien_powers = list(/obj/effect/proc_holder/alien/transfer)
+
 /obj/item/organ/internal/alien/plasmavessel/prepare_eat()
 	var/obj/S = ..()
 	S.reagents.add_reagent("plasma", storedPlasma/10)
@@ -71,6 +74,13 @@
 	icon_state = "plasma_tiny"
 	w_class = 1
 	max_plasma = 100
+	alien_powers = list(/obj/effect/proc_holder/alien/transfer)
+
+/obj/item/organ/internal/alien/plasmavessel/ravager
+	storedPlasma = 50
+	max_plasma = 100
+	plasma_rate = 5
+	heal_rate = 2.5
 	alien_powers = list(/obj/effect/proc_holder/alien/transfer)
 
 /obj/item/organ/internal/alien/plasmavessel/on_life()

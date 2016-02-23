@@ -9,7 +9,7 @@ var/list/preferences_datums = list()
 	var/ckey = "null"
 	var/path
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
-	var/max_save_slots = 6
+	var/max_save_slots = 12
 
 	//non-preference stuff
 	var/muted = 0
@@ -51,7 +51,8 @@ var/list/preferences_datums = list()
 	"16"=0,
 	"32"=0,
 	"64"=1,
-	"128"=0) //BAAAAD way to do this
+	"128"=0,
+	"256"=2) //BAAAAD way to do this
 	var/character_size="normal"
 	var/be_taur=0
 
@@ -121,7 +122,7 @@ var/list/preferences_datums = list()
 			load_path(C.ckey)
 			unlock_content = C.IsByondMember()
 			if(unlock_content)
-				max_save_slots = 8
+				max_save_slots = 16
 	var/loaded_preferences_successfully = load_preferences()
 	if(loaded_preferences_successfully)
 		if(load_character())
@@ -930,7 +931,7 @@ var/list/preferences_datums = list()
 							special_color[text2num(index_tc)]=null
 
 				if("character_size")
-					var/new_size = input(user, "Choose your character's size:", "Character Preference")  in list("big", "normal", "small", "tiny")
+					var/new_size = input(user, "Choose your character's size:", "Character Preference")  in list("huge", "large", "normal", "small", "tiny")
 					if(new_size)
 						character_size=new_size
 
@@ -1201,8 +1202,10 @@ var/list/preferences_datums = list()
 			character.sizeplay_set(SIZEPLAY_MICRO)
 		else if(character_size=="tiny")
 			character.sizeplay_set(SIZEPLAY_TINY)
-		else
+		else if(character_size=="large")
 			character.sizeplay_set(SIZEPLAY_MACRO)
+		else
+			character.sizeplay_set(SIZEPLAY_HUGE)
 
 	character.eye_color = eye_color
 	character.hair_color = hair_color

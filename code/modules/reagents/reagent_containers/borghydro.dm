@@ -202,3 +202,18 @@ Borg Shaker
 	recharge_time = 3
 
 	reagent_ids = list("beer2")
+
+/obj/item/weapon/reagent_containers/borghypo/pleasure
+	item_state = "borghypo_p"
+	icon_state = "borghypo_p"
+	name = "Pleasure Injector"
+	desc = "For all your devious needs."
+	reagent_ids = list("hornychem", "semen", "femjuice")
+	charge_cost = 5
+	amount_per_transfer_from_this = 15
+	volume = 240
+	recharge_time = 2
+
+/obj/item/weapon/reagent_containers/borghypo/pleasure/hacked
+	desc = "For all your devious needs and more."
+	reagent_ids = list("hornychem", "semen", "femjuice", "narkychem")

@@ -114,3 +114,18 @@
 		slot_flags = null
 		user << "<span class='notice'>[src] can now be concealed.</span>"
 	add_fingerprint(user)
+
+/obj/item/weapon/shield/riot/viking
+	name = "viking shield"
+	desc = "TO VALHALLA!"
+	icon_state = "buckler"
+	item_state = "buckler"
+
+/obj/item/weapon/shield/riot/viking/attackby(obj/item/weapon/W, mob/user, params)
+	if(istype(W, /obj/item/weapon/hatchet/viking))
+		if(cooldown < world.time - 25)
+			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
+			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
+			cooldown = world.time
+	else
+		..()

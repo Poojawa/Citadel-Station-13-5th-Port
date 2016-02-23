@@ -19,12 +19,33 @@
 	ammo_type = /obj/item/ammo_casing/c9mm
 	max_ammo = 30
 
+/obj/item/ammo_box/c46x30mm
+	name = "ammo box (4.6x30mm)"
+	icon_state = "46x30mmbox"
+	origin_tech = "combat=2"
+	ammo_type = /obj/item/ammo_casing/c46x30mm
+	max_ammo = 40
+
 /obj/item/ammo_box/c10mm
 	name = "ammo box (10mm)"
 	icon_state = "10mmbox"
 	origin_tech = "combat=2"
 	ammo_type = /obj/item/ammo_casing/c10mm
 	max_ammo = 20
+
+/obj/item/ammo_box/a762box
+	name = "ammo box (7.62mm)"
+	icon_state = "762mmbox"
+	origin_tech = "combat=2"
+	ammo_type = /obj/item/ammo_casing/a762
+	max_ammo = 20
+
+/obj/item/ammo_box/a556box
+	name = "ammo box (5.56mm)"
+	icon_state = "556mmbox"
+	origin_tech = "combat=2"
+	max_ammo = 30
+	ammo_type = /obj/item/ammo_casing/a556
 
 /obj/item/ammo_box/c45
 	name = "ammo box (.45)"

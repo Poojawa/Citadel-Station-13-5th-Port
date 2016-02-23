@@ -156,7 +156,7 @@
 /mob/living/silicon/robot/proc/pick_module()
 	if(module)
 		return
-	designation = input("Please, select a module!", "Robot", null, null) in list("Standard", "Engineering", "Medical", "Miner", "Janitor","Service", "Security")
+	designation = input("Please, select a module!", "Robot", null, null) in list("Standard", "Engineering","Science", "Medical", "Miner", "Janitor","Service", "Security", "Pleasure", "Loader", "Security K-9 Unit", "Borgi")
 	var/animation_length=0
 	if(module)
 		return
@@ -190,6 +190,29 @@
 					animation_length=43
 			modtype = "Butler"
 			feedback_inc("cyborg_service",1)
+
+		if("Pleasure")
+			module = new /obj/item/weapon/robot_module/pleasure(src)
+			hands.icon_state = "pleasure"
+			var/icontype = input("Select an icon!", "Robot", null, null) in list("Male", "Female", "Herm", "Xenomorph")
+			switch(icontype)
+				if("Female")
+					icon_state = "p_female"
+				//	animation_length=45
+				if("Male")
+					icon_state = "p_male"
+				//	animation_length=45
+				if("Herm")
+					icon_state = "p_herm"
+				//	animation_length=45
+				if("Xenomorph")
+					icon_state = "p_xeno"
+				//	animation_length=45
+				else
+					icon_state = "p_female"
+				//	animation_length=45
+			modtype = "p_"
+			feedback_inc("cyborg_pleasure",1)
 
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
@@ -227,6 +250,14 @@
 			feedback_inc("cyborg_engineering",1)
 			magpulse = 1
 
+		if("Science")
+			module = new /obj/item/weapon/robot_module/science(src)
+			hands.icon_state = "science"
+			icon_state = "sciborg"
+			modtype = "Sci"
+			animation_length = 45
+			feedback_inc("cyborg_science",1)
+
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
 			hands.icon_state = "janitor"
@@ -234,6 +265,31 @@
 			animation_length = 22
 			modtype = "Jan"
 			feedback_inc("cyborg_janitor",1)
+
+		if("Loader")
+			module = new /obj/item/weapon/robot_module/loader(src)
+			hands.icon_state = "loader"
+			icon_state = "loaderborg"
+			animation_length = 29
+			modtype = "Loader"
+			feedback_inc("cyborg_loader",1)
+
+		if("Security K-9 Unit")
+			module = new /obj/item/weapon/robot_module/k9(src)
+			icon = 'icons/mob/widerobot.dmi'
+			icon_state = "k9"
+			hands.icon_state = "k9"
+			animation_length = 37
+			modtype = "Security K-9 Unit"
+			feedback_inc("cyborg_k9",1)
+
+		if("Borgi")
+			module = new /obj/item/weapon/robot_module/borgi(src)
+			hands.icon_state = "borgi"
+			icon_state = "borgi"
+			animation_length = 37
+			modtype = "Borgi"
+			feedback_inc("cyborg_borgi",1)
 
 	transform_animation(animation_length)
 	notify_ai(2)
@@ -250,6 +306,10 @@
 	flick(icon_state, src)
 	sleep(animation_length+1)
 	notransform = 0
+	if(icon_state == "k9") //use for wide sprites
+		icon = 'icons/mob/widerobot.dmi'
+		pixel_x = -16
+		return
 	icon = 'icons/mob/robots.dmi'
 
 /mob/living/silicon/robot/proc/updatename()
@@ -779,12 +839,28 @@
 				overlays += "eyes-secborg"
 			if("engiborg")
 				overlays += "eyes-engiborg"
+			if("sciborg")
+				overlays += "eyes-sciborg"
 			if("janiborg")
 				overlays += "eyes-janiborg"
 			if("minerborg")
 				overlays += "eyes-minerborg"
 			if("syndie_bloodhound")
 				overlays += "eyes-syndie_bloodhound"
+			if("p_male")
+				overlays += "eyes-p_male"
+			if("p_female")
+				overlays += "eyes-p_female"
+			if("p_herm")
+				overlays += "eyes-p_herm"
+			if("p_xeno")
+				overlays += "eyes-p_xeno"
+			if("loaderborg")
+				overlays += "eyes-loaderborg"
+			if("k9")
+				overlays += "eyes-k9"
+			if("borgi")
+				overlays += "eyes-borgi"
 			else
 				overlays += "eyes"
 				state_name = "serviceborg"
@@ -802,6 +878,11 @@
 	if(jetpackoverlay)
 		overlays += "minerjetpack"
 	update_fire()
+
+	if(laser == 1)
+		overlays += "laser"
+	if(disabler == 1)
+		overlays += "disabler"
 
 /mob/living/silicon/robot/proc/installed_modules()
 	if(!module)

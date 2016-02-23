@@ -54,9 +54,7 @@
 	inv_box.slot_id = slot_l_hand
 	l_hand_hud_object = inv_box
 	adding += inv_box
-
 //begin buttons
-
 	using = new /obj/screen/inventory()
 	using.name = "hand"
 	using.icon = 'icons/mob/screen_alien.dmi'
@@ -82,7 +80,7 @@
 
 	if(istype(mymob, /mob/living/carbon/alien/humanoid/hunter))
 		mymob.leap_icon = new /obj/screen/alien/leap()
-		mymob.leap_icon.screen_loc = ui_alien_storage_r
+		mymob.leap_icon.screen_loc = ui_storage1
 		adding += mymob.leap_icon
 
 	using = new /obj/screen/drop()
@@ -145,3 +143,4 @@
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.healths, nightvisionicon, alien_plasma_display, mymob.pullin, mymob.blind, mymob.flash) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += adding + other
 	mymob.client.screen += mymob.client.void
+

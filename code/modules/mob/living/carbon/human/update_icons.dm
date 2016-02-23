@@ -116,7 +116,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 	var/race = dna ? dna.mutantrace() : null
 	if(race&&kpcode_hastail(race) &&!dna.taur) //Temp taur fix
-		t_standing+=generate_colour_icon('icons/mob/tail.dmi',"[kpcode_hastail(race)]",dna.special_color,add_layer=-TAIL_LAYER,offset_y=kpcode_tail_offset(race))
+		t_standing+=generate_colour_icon('icons/mob/tail.dmi',"[kpcode_hastail(race)]",dna.special_color,add_layer=-TAIL_LAYER)
 		/*var/list/standingt = list()
 		standingt += image("icon"='icons/mob/tail.dmi', "icon_state"="[race]", "layer"=-TAIL_LAYER)
 		if(dna.special_color_one)
@@ -130,7 +130,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 		if(!race||race=="human")
 			var/tail = dna ? dna.mutanttail : null
 			if(tail&&kpcode_hastail(tail) &&!dna.taur) //Temp taur fix
-				t_standing+=generate_colour_icon('icons/mob/tail.dmi',"[kpcode_hastail(tail)]",dna.special_color,add_layer=-TAIL_LAYER,offset_y=kpcode_tail_offset(race),human=hair_color)
+				t_standing+=generate_colour_icon('icons/mob/tail.dmi',"[kpcode_hastail(tail)]",dna.special_color,add_layer=-TAIL_LAYER,human=hair_color)
 				/*var/list/standingt = list()
 				standingt += image("icon"='icons/mob/tail.dmi', "icon_state"="[kpcode_hastail(tail)]", "pixel_y"=kpcode_tail_offset(tail), "layer"=-TAIL_LAYER) //may need a +(pixel_y/2)
 				var/image/standingt_one	= image("icon"='icons/mob/tail.dmi', "icon_state"="[kpcode_hastail(tail)]_1", "pixel_y"=kpcode_tail_offset(tail), "layer"=-TAIL_LAYER)
@@ -141,6 +141,8 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 	if(dna&&dna.taur)
 		t_standing+=generate_colour_icon('icons/mob/special/taur.dmi',"[kpcode_cantaur(dna.mutantrace())]_tail",dna.special_color,offset_x=-16,add_layer=-TAIL_LAYER)
+		if(src.vore_womb_datum.has_people()||src.vore_stomach_datum.has_people())
+			t_standing+=generate_colour_icon('icons/mob/special/taur.dmi',"[kpcode_cantaur(dna.mutantrace())]_tail_f",dna.special_color,offset_x=-16,add_layer=-TAIL_LAYER)
 
 	if(t_standing.len)
 		overlays_standing[TAIL_LAYER] =t_standing

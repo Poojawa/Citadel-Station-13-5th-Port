@@ -2,8 +2,8 @@
 
 //TODO: Make these simple_animals
 
-var/const/MIN_IMPREGNATION_TIME = 100 //time it takes to impregnate someone
-var/const/MAX_IMPREGNATION_TIME = 150
+var/const/MIN_IMPREGNATION_TIME = 500 //time it takes to impregnate someone
+var/const/MAX_IMPREGNATION_TIME = 600
 
 var/const/MIN_ACTIVE_TIME = 200 //time between being dropped and going idle
 var/const/MAX_ACTIVE_TIME = 400
@@ -16,7 +16,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	item_state = "facehugger"
 	w_class = 1 //note: can be picked up by aliens unlike most other items of w_class below 4
 	flags = MASKINTERNALS
-	throw_range = 5
+	throw_range = 1
 	tint = 3
 	flags_cover = MASKCOVERSEYES | MASKCOVERSMOUTH
 	layer = MOB_LAYER
@@ -30,8 +30,12 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/attached = 0
 
 /obj/item/clothing/mask/facehugger/attack_alien(mob/user) //can be picked up by aliens
-	attack_hand(user)
-	return
+	if(isalienravager(user)) //can't be picked up by ravagers
+		user << text("<span class='warning'>Your claws are too sharp to safely pick this up.</span>")
+		return
+	else
+		attack_hand(user)
+		return
 
 /obj/item/clothing/mask/facehugger/attack_hand(mob/user)
 	if((stat == CONSCIOUS && !sterile) && !isalien(user))
@@ -148,7 +152,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		src.loc = target
 		target.equip_to_slot(src, slot_wear_mask,,0)
 		if(!sterile)
-			M.Paralyse(MAX_IMPREGNATION_TIME/6) //something like 25 ticks = 20 seconds with the default settings
+			M.Paralyse(MAX_IMPREGNATION_TIME/12) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/pet/dog/corgi/C = M
 		loc = C

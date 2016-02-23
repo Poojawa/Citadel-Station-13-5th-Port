@@ -722,54 +722,54 @@ datum
 	id = "antacid"
 	result = "antacid"
 	required_reagents = list("sodiumbicarbonate" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 /datum/chemical_reaction/noantacid
 	name = "Noantacid"
 	id = "noantacid"
 	result = "noantacid"
 	required_reagents = list("sodiumchloride" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/growchem
 	name = "Growchem"
 	id = "growchem"
 	result = "growchem"
 	required_reagents = list("hydrogen" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 /datum/chemical_reaction/shrinkchem
 	name = "Shrinkchem"
 	id = "shrinkchem"
 	result = "shrinkchem"
 	required_reagents = list("sodium" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/stomexchem
 	name = "Stomexchem"
 	id = "stomexchem"
 	result = "stomexchem"
 	required_reagents = list("radium" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/vomitchem
 	name = "Vomitchem"
 	id = "vomitchem"
 	result = "vomitchem"
 	required_reagents = list("chlorine" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/novomitchem
 	name = "Novomitchem"
 	id = "novomitchem"
 	result = "novomitchem"
 	required_reagents = list("nitrogen" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/hornychem
 	name = "Hornychem"
 	id = "hornychem"
 	result = "hornychem"
 	required_reagents = list("lithium" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/healnomchem
 	name = "HealNomchem"
@@ -783,7 +783,7 @@ datum
 	id = "hurtnomchem"
 	result = "hurtnomchem"
 	required_reagents = list("facid" = 1, "vorechem" = 1)
-	result_amount = 1
+	result_amount = 2
 
 
 /datum/chemical_reaction/cockchem
@@ -791,39 +791,39 @@ datum
 	id = "cockchem"
 	result = "cockchem"
 	required_reagents = list("growchem" = 2, "semen" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 /datum/chemical_reaction/decockchem
 	name = "Decockchem"
 	id = "decockchem"
 	result = "decockchem"
 	required_reagents = list("shrinkchem" = 2, "semen" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 
 /datum/chemical_reaction/vagchem
 	name = "Vagchem"
 	id = "vagchem"
 	result = "vagchem"
 	required_reagents = list("growchem" = 2, "femjuice" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 /datum/chemical_reaction/devagchem
 	name = "Devagchem"
 	id = "devagchem"
 	result = "devagchem"
 	required_reagents = list("shrinkchem" = 2, "femjuice" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 
 /datum/chemical_reaction/boobchem
 	name = "Boobchem"
 	id = "boobchem"
 	result = "boobchem"
 	required_reagents = list("growchem" = 2, "milk" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 /datum/chemical_reaction/deboobchem
 	name = "Deboobchem"
 	id = "deboobchem"
 	result = "deboobchem"
 	required_reagents = list("shrinkchem" = 2, "milk" = 3, "vorechem" = 1)
-	result_amount = 2
+	result_amount = 6
 
 /obj/item/weapon/reagent_containers/pill/shrink
 	name = "shrink pill"
@@ -855,7 +855,7 @@ datum
 	result = "narkychem"
 	required_reagents = list("vorechem" = 1, "spacemountainwind" = 1, "femjuice" = 2)
 	//required_catalysts = list("femjuice" = 2)
-	result_amount=2
+	result_amount=4
 
 /datum/chemical_reaction/narkychem/on_reaction(var/datum/reagents/holder, var/created_volume, var/data_send)
 

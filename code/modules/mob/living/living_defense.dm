@@ -285,6 +285,11 @@
 
 	switch(M.a_intent)
 		if ("help")
+			if(istype(M, /mob/living/carbon/alien/humanoid/hunter/royale/megaegg))
+				visible_message("<span class='notice'>[M] engages huge bear arms and suplexes [src] into the floor with a tight grip hold. Is this even a hug or just an attempt to squeeze one's guts out?</span>")
+				playsound(loc, "hiss", 25, 1, 1)
+				playsound(loc, 'sound/effects/explosionfar.ogg', 25, 1)
+				return 0
 			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 			return 0
 
@@ -294,6 +299,7 @@
 		else
 			M.do_attack_animation(src)
 			return 1
+
 
 /mob/living/incapacitated()
 	if(stat || paralysis || stunned || weakened || restrained())

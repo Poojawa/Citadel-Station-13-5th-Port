@@ -499,7 +499,7 @@
 	can_adjust = 0
 
 /obj/item/clothing/under/plasmaman
-	name = "Plasma-man Jumpsuit"
+	name = "plasma-man Jumpsuit"
 	desc = "A specially designed suit that allows Plasma based life forms to exist in an oxygenated environment."
 	icon_state = "plasmaman"
 	item_state = "plasmaman"
@@ -548,7 +548,53 @@
 	return
 
 /obj/item/device/extinguisher_refill
-	name = "Plasma-man jumpsuit refill pack"
+	name = "plasma-man jumpsuit refill pack"
 	desc = "A compressed water pack used to refill plasma-man jumpsuit auto-extinguishers."
 	icon_state = "multitool"
+
+/obj/item/clothing/under/bb
+	name = "bare butt pajamas"
+	desc = "Why trade style for comfort? Now you can go commando down south and still be cozy up north."
+	icon_state = "barebutt"
+	item_state = "w_suit"
+	item_color = "barebutt"
+	body_parts_covered = CHEST|ARMS
+	can_adjust = 1
+/obj/item/clothing/under/bb/sweater
+	name = "black sweater"
+	icon_state = "bb_turtleblk"
+	item_state = "bl_suit"
+	item_color = "bb_turtleblk"
+
+/obj/item/clothing/under/bb/sweater/purple
+	name = "purple sweater"
+	icon_state = "bb_rdturtle"
+	item_state = "p_suit"
+	item_color = "bb_rdturtle"
+
+/obj/item/clothing/under/bb/sweater/green
+	name = "green sweater"
+	icon_state = "bb_turtlegrn"
+	item_state = "g_suit"
+	item_color = "bb_turtlegrn"
+
+/obj/item/clothing/under/bb/sweater/red
+	name = "red sweater"
+	icon_state = "bb_turtlered"
+	item_state = "r_suit"
+	item_color = "bb_turtlered"
+
+/obj/item/clothing/under/bb/sweater/blue
+	name = "blue sweater"
+	icon_state = "bb_turtleblu"
+	item_state = "b_suit"
+	item_color = "bb_turtleblu"
+
+/obj/item/clothing/under/toga
+	name = "bedsheet toga"
+	body_parts_covered = CHEST|GROIN
+	can_adjust = 0
+	icon_state = "sheettoga"
+	item_state = "w_suit"
+	item_color = "sheettoga"
 
