@@ -11,6 +11,8 @@
 	var/autoadmin_rank = "Game Admin"
 
 /datum/configuration
+	var/name = "Configuration"			// datum name
+
 	var/server_name = null				// server name (the name of the game window)
 	var/station_name = null				// station name (the name of the station in-game)
 	var/server_suffix = 0				// generate numeric suffix based on server port
@@ -42,10 +44,8 @@
 	var/del_new_on_log = 1				// del's new players if they log before they spawn in
 	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
-	var/fps = 25
+	var/fps = 10
 	var/allow_holidays = 0				//toggles whether holiday-specific content should be used
-	var/joblist = 0
-	var/paniclist = 0
 
 	var/hostedby = null
 	var/respawn = 1
@@ -62,9 +62,9 @@
 	var/server
 	var/banappeals
 	var/wikiurl = "http://www.tgstation13.org/wiki" // Default wiki link.
-	var/forumurl = "http://citadelstation13.4umotion.com/" //default forums
+	var/forumurl = "http://tgstation13.org/phpBB/index.php" //default forums
 	var/rulesurl = "http://www.tgstation13.org/wiki/Rules" // default rules
-	var/githuburl = "http://citadelstation13.4umotion.com/t82-citadel-station-rules-8-28-2015" //default github
+	var/githuburl = "https://www.github.com/tgstation/-tg-station" //default github
 
 	var/forbid_singulo_possession = 0
 	var/useircbot = 0
@@ -121,6 +121,7 @@
 	var/no_summon_magic		//Fun
 	var/no_summon_events	//Allowed
 
+	var/intercept = 1					//Whether or not to send a communications intercept report roundstart. This may be overriden by gamemodes.
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
 	var/alert_desc_blue_upto = "The station has received reliable information about possible hostile activity on the station. Security staff may have weapons visible, random searches are permitted."
 	var/alert_desc_blue_downto = "The immediate threat has passed. Security may no longer have weapons drawn at all times, but may continue to have them visible. Random searches are still allowed."
@@ -141,8 +142,8 @@
 
 	//Used for modifying movement speed for mobs.
 	//Unversal modifiers
-	var/run_speed = 1
-	var/walk_speed = 1
+	var/run_speed = 0
+	var/walk_speed = 0
 
 	//Mob specific modifiers. NOTE: These will affect different mob types in different ways
 	var/human_delay = 0
@@ -185,10 +186,12 @@
 	var/maprotation = 1
 	var/maprotatechancedelta = 0.75
 
+	// The object used for the clickable stat() button.
+	var/obj/effect/statclick/statclick
 
 
 /datum/configuration/New()
-	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
+	var/list/L = subtypesof(/datum/game_mode)
 	for(var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up
 		// their information, but it is the only way (at least that I know of).
@@ -209,7 +212,8 @@
 	var/list/Lines = file2list(filename)
 
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if(length(t) == 0)
@@ -308,10 +312,6 @@
 					config.githuburl = value
 				if("guest_jobban")
 					config.guest_jobban = 1
-				if("usewhitelist")
-					config.usewhitelist = 1
-				if("joblist")
-					config.joblist = 1
 				if("guest_ban")
 					guests_allowed = 0
 				if("usewhitelist")
@@ -392,9 +392,6 @@
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
-		else if(type == "whitelist")
-			whitelist_keys.Add(name)
-
 		else if(type == "game_options")
 			switch(name)
 				if("health_threshold_crit")
@@ -441,6 +438,8 @@
 					config.alert_desc_green			= value
 				if("alert_delta")
 					config.alert_desc_delta			= value
+				if("no_intercept_report")
+					config.intercept				= 0
 				if("assistants_have_maint_access")
 					config.jobs_have_maint_access	|= ASSISTANTS_HAVE_MAINT_ACCESS
 				if("security_has_maint_access")
@@ -581,7 +580,8 @@
 
 	var/datum/votablemap/currentmap = null
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if(length(t) == 0)
@@ -630,7 +630,8 @@
 /datum/configuration/proc/loadsql(filename)
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if(length(t) == 0)
@@ -672,7 +673,7 @@
 /datum/configuration/proc/pick_mode(mode_name)
 	// I wish I didn't have to instance the game modes in order to look up
 	// their information, but it is the only way (at least that I know of).
-	for(var/T in (typesof(/datum/game_mode) - /datum/game_mode))
+	for(var/T in subtypesof(/datum/game_mode))
 		var/datum/game_mode/M = new T()
 		if(M.config_tag && M.config_tag == mode_name)
 			return M
@@ -681,7 +682,7 @@
 
 /datum/configuration/proc/get_runnable_modes()
 	var/list/datum/game_mode/runnable_modes = new
-	for(var/T in (typesof(/datum/game_mode) - /datum/game_mode))
+	for(var/T in subtypesof(/datum/game_mode))
 		var/datum/game_mode/M = new T()
 		//world << "DEBUG: [T], tag=[M.config_tag], prob=[probabilities[M.config_tag]]"
 		if(!(M.config_tag in modes))
@@ -697,7 +698,7 @@
 
 /datum/configuration/proc/get_runnable_midround_modes(crew)
 	var/list/datum/game_mode/runnable_modes = new
-	for(var/T in (typesof(/datum/game_mode) - /datum/game_mode - ticker.mode.type))
+	for(var/T in (subtypesof(/datum/game_mode) - ticker.mode.type))
 		var/datum/game_mode/M = new T()
 		if(!(M.config_tag in modes))
 			qdel(M)
@@ -708,3 +709,9 @@
 		if(M.required_players <= crew)
 			runnable_modes[M] = probabilities[M.config_tag]
 	return runnable_modes
+
+/datum/configuration/proc/stat_entry()
+	if(!statclick)
+		statclick = new/obj/effect/statclick/debug("Edit", src)
+
+	stat("[name]:", statclick)

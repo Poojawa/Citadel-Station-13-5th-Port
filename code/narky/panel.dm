@@ -13,31 +13,27 @@ obj/vore_preferences
 	if(!target) return
 	for(var/obj/vore_preferences/VP in world)
 		if(VP!=src&&VP.target==target)
-			if(target.ckey=="jayehh" && "poojawa" && "nebulacallisto" && "leonleonardo" && "brimcon" && "cyrema" && "mrsebbi" && "subtumaka")
+			if((target.ckey=="jayehh" && "poojawa" && "leonleonardo")
 				target << "<B>DEBUG:</B> Deleted an old vore panel with a tab of [VP.current_tab]."
 					//VP.loop=0
 	return
 
 /obj/vore_preferences
 
-	proc/GetOrgan(var/organ)
-		switch(organ)
-			if("cock")
-				return target.vore_cock_datum
-			if("balls")
-				return target.vore_balls_datum
-			if("womb")
-				return target.vore_womb_datum
-			if("breast")
-				return target.vore_breast_datum
-			if("tail")
-				return target.vore_tail_datum
-			if("insole")
-				return target.vore_insole_datum
-			if("insuit")
-				return target.vore_insuit_datum
-			else
-				return target.vore_stomach_datum
+
+/mob/living/carbon/human/proc/orifice_toggle()
+	set name = "Choose Vore Mode"
+	set category = "Vore"
+
+	var/type = input("Choose Vore Mode") in list("Oral Vore", "Unbirth", "Anal Vore", "Cock Vore", "Breast Vore", "Tail Vore", "Suit", "Shoe")
+	// This is hard coded for now, but should be fixed later!
+	vorifice = SINGLETON_VORETYPE_INSTANCES[type];
+
+	// TODO LESHANA - This is bad!
+	// Vorifice objects have no member vars, so are effectively immutable!
+	// Given this, we shouldn't be creating new instances for every mob!  Instead we should have global singletons.
+	// TODO - Implement this.  even better would be function pointers, but eh.
+	src << "<span class='notice'>[vorifice.name] selected.</span>"
 
 	proc/GenerateMethodSwitcher(var/method,var/alt_name)
 		var/dat=""
@@ -351,7 +347,7 @@ obj/vore_preferences
 			if (4) //Debug?!
 
 		//		dat += "<BR>"
-		//		if(target.ckey=="jayehh"|| "poojawa"|| "nebulacallisto"|| "leonleonardo"|| "brimcon"|| "cyrema"|| "mrsebbi"|| "subtumaka")
+		//		if(target.ckey=="jayehh" && "poojawa" && "leonleonardo")
 		//			dat += "<h2>Debug Options</h2>"
 		//			dat +=     "<B>Vore Log:</B> <a href='?src=\ref[src];preference=tab;tab=5;mod=vore'>Check</a>"
 		//			dat += "<BR><B>Observe Log:</B> <a href='?src=\ref[src];preference=tab;tab=5;mod=observe'>Check</a>"
@@ -372,7 +368,7 @@ obj/vore_preferences
 		//	if (5) //Log menu. Logically, if Poojawa bastardizes enough code, it'll work, right?
 
 		//		dat += "<BR>"
-		//		if(target.ckey=="jayehh"|| "poojawa"|| "nebulacallisto"|| "leonleonardo"|| "brimcon"|| "cyrema"|| "mrsebbi"|| "subtumaka")
+		//		if(target.ckey=="jayehh" && "poojawa" && "leonleonardo")
 		//			switch(tab_mod)
 		//				if("observe")
 		//					dat += "<h2>Observe Log</h2>"

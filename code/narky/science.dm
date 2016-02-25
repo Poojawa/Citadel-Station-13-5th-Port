@@ -38,3 +38,88 @@ datum/design/stethoscope_advanced
 	materials = list("$metal" = 500)
 	build_path = /obj/item/clothing/tie/stethoscope/advanced
 	category = list("Medical")*/
+
+/obj/item/projectile/sizeray
+	name = "mystery beam"
+	icon_state = "omnilaser"
+	hitsound = null
+	damage = 0
+	damage_type = STAMINA
+	flag = "laser"
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+
+/obj/item/projectile/sizeray/shrinkray/icon_state="bluelaser"
+/obj/item/projectile/sizeray/growthray/icon_state="laser"
+
+/obj/item/ammo_casing/energy/laser/growthray
+	projectile_type = /obj/item/projectile/sizeray/growthray
+	select_name = "redray"
+
+/obj/item/ammo_casing/energy/laser/shrinkray
+	projectile_type = /obj/item/projectile/sizeray/shrinkray
+	select_name = "blueray"
+
+/obj/item/projectile/sizeray/shrinkray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M=target
+		M.sizeplay_shrink()
+	return 1
+
+/obj/item/projectile/sizeray/growthray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M=target
+		M.sizeplay_grow()
+	return 1
+
+
+
+
+//Gun here
+/obj/item/weapon/gun/energy/laser/sizeray
+	name = "mystery raygun"
+	icon_state = "bluetag"
+	desc = "This will be fun!"
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/shrinkray)
+	origin_tech = "combat=1;magnets=2"
+	clumsy_check = 0
+	var/charge_tick = 0
+
+	//special_check(var/mob/living/carbon/human/M)
+		//return 1
+
+	New()
+		..()
+		SSobj.processing |= src
+
+
+	Destroy()
+		SSobj.processing.Remove(src)
+		..()
+
+
+	process()
+		charge_tick++
+		if(charge_tick < 4) return 0
+		charge_tick = 0
+		if(!power_supply) return 0
+		power_supply.give(100)
+		update_icon()
+		return 1
+
+	attackby(obj/item/W, mob/user)
+		if(W==src)
+			if(icon_state=="bluetag")
+				icon_state="redtag"
+				ammo_type = list(/obj/item/ammo_casing/energy/laser/growthray)
+			else
+				icon_state="bluetag"
+				ammo_type = list(/obj/item/ammo_casing/energy/laser/shrinkray)
+		return ..()
+
+
+/obj/item/weapon/gun/energy/laser/sizeray/one
+	name="shrink ray"
+/obj/item/weapon/gun/energy/laser/sizeray/two
+	name="growth ray"
+	icon_state = "redtag"
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/growthray)

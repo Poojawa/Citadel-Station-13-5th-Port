@@ -108,9 +108,9 @@
 			|| locate(/obj/machinery/computer/cloning, get_step(src, SOUTH)) \
 			|| locate(/obj/machinery/computer/cloning, get_step(src, EAST)) \
 			|| locate(/obj/machinery/computer/cloning, get_step(src, WEST)))
+			if(!occupant.suiciding && !(occupant.disabilities & NOCLONE))
+				occupant.notify_ghost_cloning("Your corpse has been placed into a cloning scanner. Re-enter your corpse if you want to be cloned!", source = src)
 
-			occupant.notify_ghost_cloning("Your corpse has been placed into a cloning scanner. Re-enter your corpse if you want to be cloned!", source = src)
-		
 		var/obj/machinery/computer/scan_consolenew/console
 		for(dir in list(NORTH,EAST,SOUTH,WEST))
 			console = locate(/obj/machinery/computer/scan_consolenew, get_step(src, dir))
@@ -168,7 +168,3 @@
 		return
 
 	toggle_open(user)
-
-/obj/machinery/dna_scannernew/blob_act()
-	if(prob(75))
-		qdel(src)

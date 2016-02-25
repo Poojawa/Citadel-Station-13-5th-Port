@@ -2,7 +2,6 @@
 
 /obj/effect/anomaly
 	name = "anomaly"
-	icon = 'icons/effects/effects.dmi'
 	desc = "A mysterious anomaly, seen commonly only in the region of space that the station orbits..."
 	icon_state = "bhole3"
 	unacidable = 1
@@ -13,6 +12,8 @@
 	var/obj/item/device/assembly/signaler/anomaly/aSignal = null
 
 /obj/effect/anomaly/New()
+	..()
+	poi_list |= src
 	SetLuminosity(initial(luminosity))
 	aSignal = new(src)
 	aSignal.code = rand(1,100)
@@ -21,6 +22,9 @@
 	if(IsMultiple(aSignal.frequency, 2))//signaller frequencies are always uneven!
 		aSignal.frequency++
 
+/obj/effect/anomaly/Destroy()
+	poi_list.Remove(src)
+	return ..()
 
 /obj/effect/anomaly/proc/anomalyEffect()
 	if(prob(movechance))
@@ -62,6 +66,8 @@
 	for(var/obj/O in orange(4, src))
 		if(!O.anchored)
 			step_towards(O,src)
+	for(var/mob/living/M in range(0, src))
+		gravShock(M)
 	for(var/mob/living/M in orange(4, src))
 		step_towards(M,src)
 	for(var/obj/O in range(0,src))
@@ -70,13 +76,14 @@
 			if(target && !target.stat)
 				O.throw_at(target, 5, 10)
 
+/obj/effect/anomaly/grav/Crossed(mob/A)
+	gravShock(A)
+
 /obj/effect/anomaly/grav/Bump(mob/A)
 	gravShock(A)
-	return
 
 /obj/effect/anomaly/grav/Bumped(mob/A)
 	gravShock(A)
-	return
 
 /obj/effect/anomaly/grav/proc/gravShock(mob/A)
 	if(boing && isliving(A) && !A.stat)
@@ -102,6 +109,11 @@
 /obj/effect/anomaly/flux/anomalyEffect()
 	..()
 	canshock = 1
+	for(var/mob/living/M in range(0, src))
+		mobShock(M)
+
+/obj/effect/anomaly/flux/Crossed(mob/living/M)
+	mobShock(M)
 
 /obj/effect/anomaly/flux/Bump(mob/living/M)
 	mobShock(M)
@@ -203,7 +215,8 @@
 /obj/effect/anomaly/bhole/proc/affect_coord(x, y, ex_act_force, pull_chance, turf_removal_chance)
 	//Get turf at coordinate
 	var/turf/T = locate(x, y, z)
-	if(isnull(T))	return
+	if(isnull(T))
+		return
 
 	//Pulling and/or ex_act-ing movable atoms in that turf
 	if(prob(pull_chance))

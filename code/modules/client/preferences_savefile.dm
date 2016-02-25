@@ -2,7 +2,7 @@
 #define SAVEFILE_VERSION_MIN	8
 
 //This is the current version, anything below this will attempt to update (if it's not obsolete)
-#define SAVEFILE_VERSION_MAX	12
+#define SAVEFILE_VERSION_MAX	13
 /*
 SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Carn
 	This proc checks if the current directory of the savefile S needs updating
@@ -102,7 +102,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(current_version < 12)
 		ignoring = list()
 
-
 //should this proc get fairly long (say 3 versions long),
 //just increase SAVEFILE_VERSION_MIN so it's not as far behind
 //SAVEFILE_VERSION_MAX and then delete any obsolete if clauses
@@ -113,75 +112,115 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(current_version < 9)		//an example, underwear were an index for a hardcoded list, converting to a string
 		if(gender == MALE)
 			switch(underwear)
-				if(1)	underwear = "Mens White"
-				if(2)	underwear = "Mens Grey"
-				if(3)	underwear = "Mens Green"
-				if(4)	underwear = "Mens Blue"
-				if(5)	underwear = "Mens Black"
-				if(6)	underwear = "Mankini"
-				if(7)	underwear = "Mens Hearts Boxer"
-				if(8)	underwear = "Mens Black Boxer"
-				if(9)	underwear = "Mens Grey Boxer"
-				if(10)	underwear = "Mens Striped Boxer"
-				if(11)	underwear = "Mens Kinky"
-				if(12)	underwear = "Mens Red"
-				if(13)	underwear = "Nude"
+				if(1)
+					underwear = "Mens White"
+				if(2)
+					underwear = "Mens Grey"
+				if(3)
+					underwear = "Mens Green"
+				if(4)
+					underwear = "Mens Blue"
+				if(5)
+					underwear = "Mens Black"
+				if(6)
+					underwear = "Mankini"
+				if(7)
+					underwear = "Mens Hearts Boxer"
+				if(8)
+					underwear = "Mens Black Boxer"
+				if(9)
+					underwear = "Mens Grey Boxer"
+				if(10)
+					underwear = "Mens Striped Boxer"
+				if(11)
+					underwear = "Mens Kinky"
+				if(12)
+					underwear = "Mens Red"
+				if(13)
+					underwear = "Nude"
 		else
 			switch(underwear)
-				if(1)	underwear = "Ladies Red"
-				if(2)	underwear = "Ladies White"
-				if(3)	underwear = "Ladies Yellow"
-				if(4)	underwear = "Ladies Blue"
-				if(5)	underwear = "Ladies Black"
-				if(6)	underwear = "Ladies Thong"
-				if(7)	underwear = "Babydoll"
-				if(8)	underwear = "Ladies Baby-Blue"
-				if(9)	underwear = "Ladies Green"
-				if(10)	underwear = "Ladies Pink"
-				if(11)	underwear = "Ladies Kinky"
-				if(12)	underwear = "Tankini"
-				if(13)	underwear = "Nude"
-		if(!(pref_species in species_list))
-			pref_species = new /datum/species/human()
-	return
+				if(1)
+					underwear = "Ladies Red"
+				if(2)
+					underwear = "Ladies White"
+				if(3)
+					underwear = "Ladies Yellow"
+				if(4)
+					underwear = "Ladies Blue"
+				if(5)
+					underwear = "Ladies Black"
+				if(6)
+					underwear = "Ladies Thong"
+				if(7)
+					underwear = "Babydoll"
+				if(8)
+					underwear = "Ladies Baby-Blue"
+				if(9)
+					underwear = "Ladies Green"
+				if(10)
+					underwear = "Ladies Pink"
+				if(11)
+					underwear = "Ladies Kinky"
+				if(12)
+					underwear = "Tankini"
+				if(13)
+					underwear = "Nude"
+
+	if(pref_species && !(pref_species.id in roundstart_species))
+		pref_species = new /datum/species/human()
+
+	if(current_version < 13 || !istext(backbag))
+		switch(backbag)
+			if(2)
+				backbag = DSATCHEL
+			else
+				backbag = DBACKPACK
+
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
-	if(!ckey)	return
+	if(!ckey)
+		return
 	path = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/[filename]"
 
 /datum/preferences/proc/load_preferences()
-	if(!path)				return 0
-	if(!fexists(path))		return 0
+	if(!path)
+		return 0
+	if(!fexists(path))
+		return 0
 
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
 
 	var/needs_update = savefile_needs_update(S)
 	if(needs_update == -2)		//fatal, can't load any data
 		return 0
 
-	if(!S["species"] || !config.mutant_races)
-		S["species"]		<< new /datum/species/human()
-
 	//general preferences
 	S["ooccolor"]			>> ooccolor
 	S["lastchangelog"]		>> lastchangelog
 	S["UI_style"]			>> UI_style
-	S["be_special"]			>> be_special
+	S["hotkeys"]			>> hotkeys
+	S["tgui_fancy"]			>> tgui_fancy
+	S["tgui_lock"]			>> tgui_lock
 
 	if(islist(S["be_special"]))
-		S["be_special"] >> be_special
+		S["be_special"] 	>> be_special
 	else //force update and store the old bitflag version of be_special
 		needs_update = 11
-		S["be_special"] >> old_be_special
+		S["be_special"] 	>> old_be_special
 
 	S["default_slot"]		>> default_slot
 	S["chat_toggles"]		>> chat_toggles
 	S["toggles"]			>> toggles
 	S["ghost_form"]			>> ghost_form
+	S["ghost_orbit"]		>> ghost_orbit
 	S["preferred_map"]		>> preferred_map
 	S["ignoring"]			>> ignoring
+	S["ghost_hud"]			>> ghost_hud
+	S["inquisitive_ghost"]	>> inquisitive_ghost
 
 	//try to fix any outdated data if necessary
 	if(needs_update >= 0)
@@ -191,17 +230,23 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Sanitize
 	ooccolor		= sanitize_ooccolor(sanitize_hexcolor(ooccolor, 6, 1, initial(ooccolor)))
 	lastchangelog	= sanitize_text(lastchangelog, initial(lastchangelog))
-	UI_style		= sanitize_inlist(UI_style, list("Midnight", "Plasmafire", "Retro"), initial(UI_style))
+	UI_style		= sanitize_inlist(UI_style, list("Midnight", "Plasmafire", "Retro", "Slimecore", "Operative"), initial(UI_style))
+	hotkeys			= sanitize_integer(hotkeys, 0, 1, initial(hotkeys))
+	tgui_fancy		= sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
+	tgui_lock		= sanitize_integer(tgui_lock, 0, 1, initial(tgui_lock))
 	default_slot	= sanitize_integer(default_slot, 1, max_save_slots, initial(default_slot))
 	toggles			= sanitize_integer(toggles, 0, 65535, initial(toggles))
 	ghost_form		= sanitize_inlist(ghost_form, ghost_forms, initial(ghost_form))
+	ghost_orbit 	= sanitize_inlist(ghost_orbit, ghost_orbits, initial(ghost_orbit))
 
 	return 1
 
 /datum/preferences/proc/save_preferences()
-	if(!path)				return 0
+	if(!path)
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
 
 	S["version"] << SAVEFILE_VERSION_MAX		//updates (or failing that the sanity checks) will ensure data is not invalid at load. Assume up-to-date
@@ -210,23 +255,33 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["ooccolor"]			<< ooccolor
 	S["lastchangelog"]		<< lastchangelog
 	S["UI_style"]			<< UI_style
+	S["hotkeys"]			<< hotkeys
+	S["tgui_fancy"]			<< tgui_fancy
+	S["tgui_lock"]			<< tgui_lock
 	S["be_special"]			<< be_special
 	S["default_slot"]		<< default_slot
 	S["toggles"]			<< toggles
 	S["chat_toggles"]		<< chat_toggles
 	S["ghost_form"]			<< ghost_form
+	S["ghost_orbit"]		<< ghost_orbit
 	S["preferred_map"]		<< preferred_map
 	S["ignoring"]			<< ignoring
+	S["ghost_hud"]			<< ghost_hud
+	S["inquisitive_ghost"]	<< inquisitive_ghost
 
 	return 1
 
 /datum/preferences/proc/load_character(slot)
-	if(!path)				return 0
-	if(!fexists(path))		return 0
+	if(!path)
+		return 0
+	if(!fexists(path))
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
-	if(!slot)	slot = default_slot
+	if(!slot)
+		slot = default_slot
 	slot = sanitize_integer(slot, 1, max_save_slots, initial(default_slot))
 	if(slot != default_slot)
 		default_slot = slot
@@ -238,21 +293,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		return 0
 
 	//Species
-	/*var/species_name
-	S["species"]			>> species_name
-	if(config.mutant_races && species_name && (species_name in roundstart_species))
-		var/newtype = roundstart_species[species_name]
+	var/species_id
+	S["species"]			>> species_id
+	if(config.mutant_races && species_id && (species_id in roundstart_species))
+		var/newtype = roundstart_species[species_id]
 		pref_species = new newtype()
 	else
 		pref_species = new /datum/species/human()
 
 	if(!S["features["mcolor"]"] || S["features["mcolor"]"] == "#000")
-		S["features["mcolor"]"]	<< "#FFF"*/
-
-	if(!S["species"] || !config.mutant_races)
-		S["species"]		<< new /datum/species/human()
-	//if(!S["mutant_color"] || S["mutant_color"] == "#000")
-	//	S["mutant_color"]	<< "#FFF"
+		S["features["mcolor"]"]	<< "#FFF"
 
 	//Character
 	S["OOC_Notes"]			>> metadata
@@ -290,7 +340,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["cyborg_name"]		>> custom_names["cyborg"]
 	S["religion_name"]		>> custom_names["religion"]
 	S["deity_name"]			>> custom_names["deity"]
-	S["species"]			>> pref_species
 
 	//Customs
 	S["mutant_tail"]		>> mutant_tail
@@ -306,6 +355,17 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["character_size"]		>> character_size
 	S["p_cock"]				>> p_cock
 	S["p_vagina"]			>> p_vagina
+
+	//Flavour Text
+	S["flavor_texts_general"]	>> flavor_texts["general"]
+
+	//Inside flavour text
+	S["inside_flavour_texts_stomach"]	>> inside_flavour_texts["Stomach"]
+	S["inside_flavour_texts_balls"]		>> inside_flavour_texts["Cock"]
+	S["inside_flavour_texts_womb"]		>> inside_flavour_texts["Womb"]
+	S["inside_flavour_texts_boobs"]		>> inside_flavour_texts["Boob"]
+	S["inside_flavour_texts_tail"]		>> inside_flavour_texts["Tail"]
+
 
 	//Jobs
 	S["userandomjob"]		>> userandomjob
@@ -326,12 +386,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Sanitize
 	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
-	//if(!(pref_species in species_list))
-	if(!(pref_species))
-		pref_species = new /datum/species/human()
-	//if(!mutant_color || mutant_color == "#000")
-	//	mutant_color = "#FFF"
-	if(!real_name)	real_name = random_unique_name(gender)
+	if(!features["mcolor"] || features["mcolor"] == "#000")
+		features["mcolor"] = pick("FFFFFF","7F7F7F", "7FFF7F", "7F7FFF", "FF7F7F", "7FFFFF", "FF7FFF", "FFFF7F")
+	if(!real_name)
+		real_name = random_unique_name(gender)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	be_random_body	= sanitize_integer(be_random_body, 0, 1, initial(be_random_body))
 	gender			= sanitize_gender(gender)
@@ -340,39 +398,19 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		facial_hair_style			= sanitize_inlist(facial_hair_style, facial_hair_styles_male_list)
 		underwear		= sanitize_inlist(underwear, underwear_m)
 		undershirt 		= sanitize_inlist(undershirt, undershirt_m)
-		socks			= sanitize_inlist(socks, socks_m)
 	else
 		hair_style			= sanitize_inlist(hair_style, hair_styles_female_list)
 		facial_hair_style			= sanitize_inlist(facial_hair_style, facial_hair_styles_female_list)
 		underwear		= sanitize_inlist(underwear, underwear_f)
 		undershirt		= sanitize_inlist(undershirt, undershirt_f)
-		socks			= sanitize_inlist(socks, socks_f)
-
+	socks			= sanitize_inlist(socks, socks_list)
 	age				= sanitize_integer(age, AGE_MIN, AGE_MAX, initial(age))
 	hair_color			= sanitize_hexcolor(hair_color, 3, 0)
 	facial_hair_color			= sanitize_hexcolor(facial_hair_color, 3, 0)
 	eye_color		= sanitize_hexcolor(eye_color, 3, 0)
-	//if(eye_het)
-	//	eye_het		= sanitize_hexcolor(eye_het, 3, 0)
-	special_color	= sanitize_colour_list(special_color)
 	skin_tone		= sanitize_inlist(skin_tone, skin_tones)
-	backbag			= sanitize_integer(backbag, 1, backbaglist.len, initial(backbag))
-	mutant_tail 	= sanitize_text(mutant_tail, initial(mutant_tail))
-	mutant_wing 	= sanitize_text(mutant_wing, initial(mutant_wing))
-	wingcolor		= sanitize_hexcolor(wingcolor, 3, 0)
-	character_size 	= sanitize_text(character_size, initial(character_size))
-//	mutant_color	= sanitize_hexcolor(mutant_color, 3, 0)
-
-	vore_ability=sanitize_vore_list(vore_ability)
-	if(isnull(vore_banned_methods))vore_banned_methods=0
-	if(isnull(vore_extra_bans))vore_extra_bans=65535
-	if(isnull(p_vagina)) p_vagina=gender==FEMALE
-	if(isnull(p_cock))
-		p_cock=list("has"=gender==MALE,"type"="human","color"="900")
-
-	skin_tone		= sanitize_inlist(skin_tone, skin_tones)
-	backbag			= sanitize_integer(backbag, 1, backbaglist.len, initial(backbag))
-	/*features["mcolor"]	= sanitize_hexcolor(features["mcolor"], 3, 0)
+	backbag			= sanitize_inlist(backbag, backbaglist, initial(backbag))
+	features["mcolor"]	= sanitize_hexcolor(features["mcolor"], 3, 0)
 	features["tail_lizard"]	= sanitize_inlist(features["tail_lizard"], tails_list_lizard)
 	features["tail_human"] 	= sanitize_inlist(features["tail_human"], tails_list_human, "None")
 	features["snout"]	= sanitize_inlist(features["snout"], snouts_list)
@@ -380,7 +418,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	features["ears"]	= sanitize_inlist(features["ears"], ears_list, "None")
 	features["frills"] 	= sanitize_inlist(features["frills"], frills_list)
 	features["spines"] 	= sanitize_inlist(features["spines"], spines_list)
-	features["body_markings"] 	= sanitize_inlist(features["body_markings"], body_markings_list)*/
+	features["body_markings"] 	= sanitize_inlist(features["body_markings"], body_markings_list)
 
 	userandomjob	= sanitize_integer(userandomjob, 0, 1, initial(userandomjob))
 	job_civilian_high = sanitize_integer(job_civilian_high, 0, 65535, initial(job_civilian_high))
@@ -396,9 +434,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	return 1
 
 /datum/preferences/proc/save_character()
-	if(!path)				return 0
+	if(!path)
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/character[default_slot]"
 
 	S["version"]			<< SAVEFILE_VERSION_MAX	//load_character will sanitize any bad data, so assume up-to-date.
@@ -420,7 +460,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["undershirt"]			<< undershirt
 	S["socks"]				<< socks
 	S["backbag"]			<< backbag
-	S["species"]			<< pref_species.name
+	S["species"]			<< pref_species.id
 	S["feature_mcolor"]					<< features["mcolor"]
 	S["feature_lizard_tail"]			<< features["tail_lizard"]
 	S["feature_human_tail"]				<< features["tail_human"]
@@ -436,19 +476,31 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["cyborg_name"]		<< custom_names["cyborg"]
 	S["religion_name"]		<< custom_names["religion"]
 	S["deity_name"]			<< custom_names["deity"]
-	S["species"]			<< pref_species
-	//Custom
-	S["mutant_tail"]		<< mutant_tail
-	S["mutant_wing"]		<< mutant_wing
-	S["wingcolor"]			<< wingcolor
-	S["special_color"]		<< special_color
-	S["be_taur"]			<< be_taur
-	S["vore_ability"]		<< vore_ability
-	S["vore_banned_methods"]<< vore_banned_methods
-	S["vore_extra_bans"]	<< vore_extra_bans
-	S["character_size"]		<< character_size
-	S["p_cock"]				<< p_cock
-	S["p_vagina"]			<< p_vagina
+
+	//Customs
+	S["mutant_tail"]		>> mutant_tail
+	S["mutant_wing"]		>> mutant_wing
+	S["wingcolor"]			>> wingcolor
+	//S["special_color_one"]	>> special_color_one
+	//S["special_color_two"]	>> special_color_two
+	S["special_color"]		>> special_color
+	S["be_taur"]			>> be_taur
+	S["vore_ability"]		>> vore_ability
+	S["vore_banned_methods"]>> vore_banned_methods
+	S["vore_extra_bans"]	>> vore_extra_bans
+	S["character_size"]		>> character_size
+	S["p_cock"]				>> p_cock
+	S["p_vagina"]			>> p_vagina
+
+	//Flavour Text
+	S["flavor_texts_general"]	<< flavor_texts["general"]
+
+	//Inside flavour text
+	S["inside_flavour_texts_stomach"]	<< inside_flavour_texts["Stomach"]
+	S["inside_flavour_texts_balls"]		<< inside_flavour_texts["Cock"]
+	S["inside_flavour_texts_womb"]		<< inside_flavour_texts["Womb"]
+	S["inside_flavour_texts_boobs"]		<< inside_flavour_texts["Boob"]
+	S["inside_flavour_texts_tail"]		<< inside_flavour_texts["Tail"]
 
 	//Jobs
 	S["userandomjob"]		<< userandomjob

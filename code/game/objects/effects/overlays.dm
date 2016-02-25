@@ -20,7 +20,6 @@
 	spawn(10) qdel(src)
 
 /obj/effect/overlay/temp
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "nothing"
 	anchored = 1
 	layer = 4.1
@@ -39,15 +38,55 @@
 	spawn(duration)
 		qdel(src)
 
+/obj/effect/overlay/temp/heal //color is white by default, set to whatever is needed
+	name = "healing glow"
+	icon_state = "heal"
+	duration = 15
+
+/obj/effect/overlay/temp/heal/New()
+	..()
+	pixel_x = rand(-12, 12)
+	pixel_y = rand(-9, 0)
+
+/obj/effect/overlay/temp/explosion
+	name = "explosion"
+	icon = 'icons/effects/96x96.dmi'
+	icon_state = "explosion"
+	pixel_x = -32
+	pixel_y = -32
+	duration = 8
+
+/obj/effect/overlay/temp/blob
+	name = "blob"
+	icon_state = "blob_attack"
+	alpha = 140
+	randomdir = 0
+	duration = 6
+
+/obj/effect/overlay/temp/guardian
+	randomdir = 0
+
+/obj/effect/overlay/temp/guardian/phase
+	duration = 5
+	icon_state = "phasein"
+
+/obj/effect/overlay/temp/guardian/phase/out
+	icon_state = "phaseout"
 
 /obj/effect/overlay/temp/cult
-	name = "unholy glow"
-	icon_state = "wallglow"
-	layer = 2.01
 	randomdir = 0
 	duration = 10
 
-/obj/effect/overlay/temp/cult/floor
+/obj/effect/overlay/temp/cult/sac
+	name = "maw of Nar-Sie"
+	icon_state = "sacconsume"
+
+/obj/effect/overlay/temp/cult/turf
+	name = "unholy glow"
+	icon_state = "wallglow"
+	layer = TURF_LAYER + 0.07
+
+/obj/effect/overlay/temp/cult/turf/floor
 	icon_state = "floorglow"
 	duration = 5
 

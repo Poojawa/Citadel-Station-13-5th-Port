@@ -1,5 +1,6 @@
 #define DEBUG					//Enables byond profiling and full runtime logs - note, this may also be defined in your .dme file
-//#define TESTING				//Enables in-depth debug messages to runtime log (used for debugging)								//By using the testing("message") proc you can create debug-feedback for people with this
+								//Enables in-depth debug messages to runtime log (used for debugging)
+//#define TESTING				//By using the testing("message") proc you can create debug-feedback for people with this
 								//uncommented, but not visible in the release version)
 
 #define PRELOAD_RSC	1			/*set to:
@@ -31,7 +32,7 @@
 #define POCKET_STRIP_DELAY			40	//time taken (in deciseconds) to search somebody's pockets
 #define DOOR_CRUSH_DAMAGE	15	//the amount of damage that airlocks deal when they crush you
 
-#define	HUNGER_FACTOR		0.4	//factor at which mob nutrition decreases
+#define	HUNGER_FACTOR		0.1	//factor at which mob nutrition decreases
 #define	REAGENTS_METABOLISM 0.4	//How many units of reagent are consumed per tick, by default.
 #define REAGENTS_EFFECT_MULTIPLIER (REAGENTS_METABOLISM / 0.4)	// By defining the effect multiplier this way, it'll exactly adjust all effects according to how they originally were with the 0.4 metabolism
 
@@ -48,12 +49,10 @@
 #warn compiling in TESTING mode. testing() debug messages will be visible.
 #endif
 
-#define MIN_COMPILER_VERSION 508
+#define MIN_COMPILER_VERSION 509
 #if DM_VERSION < MIN_COMPILER_VERSION //Update this whenever you need to take advantage of more recent byond features
 #error Your version of BYOND is too out-of-date to compile this project. Go to byond.com/download and update.
 #endif
-
-#define USE_BYGEX
 
 
 #ifndef SERVERTOOLS

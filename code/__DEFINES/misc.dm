@@ -23,25 +23,24 @@
 #define FRIDAY_13TH				"Friday the 13th"
 
 //Human Overlays Indexes/////////
-#define SPECIES_LAYER			28		// mutantrace colors... these are on a seperate layer in order to prvent
-#define MUTATIONS_LAYER			27		//mutations. Hulk, Tk headglows, etc
-#define BODY_BEHIND_LAYER		26
-#define BODY_LAYER				25		//underwear, undershirts, socks, eyes, lips(makeup)
-#define BODY_ADJ_LAYER			24
-#define AUGMENTS_LAYER			23
-#define FRONT_MUTATIONS_LAYER	22		//mutations that should appear above body and augments layer (e.g. laser eyes)
-#define DAMAGE_LAYER			21		//damage indicators (cuts and burns)
-#define UNIFORM_LAYER			20
-#define ID_LAYER				19
-#define SHOES_LAYER				18
-#define GLOVES_LAYER			17
-#define EARS_LAYER				16
-#define SUIT_LAYER				15
-#define GLASSES_LAYER			14
-#define BELT_LAYER				13		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		12
-#define BACK_LAYER				11
-#define TAIL_LAYER				10
+#define SPECIES_LAYER			27		// mutantrace colors... these are on a seperate layer in order to prvent
+#define MUTATIONS_LAYER			26		//mutations. Hulk, Tk headglows, etc
+#define BODY_BEHIND_LAYER		25
+#define BODY_LAYER				24		//underwear, undershirts, socks, eyes, lips(makeup)
+#define BODY_ADJ_LAYER			23
+#define AUGMENTS_LAYER			22
+#define FRONT_MUTATIONS_LAYER	21		//mutations that should appear above body and augments layer (e.g. laser eyes)
+#define DAMAGE_LAYER			20		//damage indicators (cuts and burns)
+#define UNIFORM_LAYER			19
+#define ID_LAYER				18
+#define SHOES_LAYER				17
+#define GLOVES_LAYER			16
+#define EARS_LAYER				15
+#define SUIT_LAYER				14
+#define GLASSES_LAYER			13
+#define BELT_LAYER				12		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		11
+#define BACK_LAYER				10
 #define HAIR_LAYER				9		//TODO: make part of head layer?
 #define FACEMASK_LAYER			8
 #define HEAD_LAYER				7
@@ -51,7 +50,7 @@
 #define R_HAND_LAYER			3		//Having the two hands seperate seems rather silly, merge them together? It'll allow for code to be reused on mobs with arbitarily many hands
 #define BODY_FRONT_LAYER		2
 #define FIRE_LAYER				1		//If you're on fire
-#define TOTAL_LAYERS			28		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
+#define TOTAL_LAYERS			27		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
 
 //Human Overlay Index Shortcuts for alternate_worn_layer, layers
 //Because I *KNOW* somebody will think layer+1 means "above"
@@ -121,9 +120,11 @@
 //some arbitrary defines to be used by self-pruning global lists. (see master_controller)
 #define PROCESS_KILL 26	//Used to trigger removal from a processing list
 
-#define MANIFEST_ERROR_NAME		1
-#define MANIFEST_ERROR_COUNT	2
-#define MANIFEST_ERROR_ITEM		4
+// Cargo-related stuff.
+#define MANIFEST_ERROR_CHANCE		5
+#define MANIFEST_ERROR_NAME			1
+#define MANIFEST_ERROR_CONTENTS		2
+#define MANIFEST_ERROR_ITEM			4
 
 #define TRANSITIONEDGE			7 //Distance from edge to move to another z-level
 
@@ -182,6 +183,8 @@
 #define ZLEVEL_ABANDONNEDTSAT 3
 #define ZLEVEL_CENTCOM 2
 #define ZLEVEL_STATION 1
+#define ZLEVEL_LAVALAND 5
+#define ZLEVEL_UNDERGROUND 6
 
 //ticker.current_state values
 #define GAME_STATE_STARTUP		0
@@ -272,6 +275,7 @@ var/list/bloody_footprints_cache = list()
 #define TURF_DRY		0
 #define TURF_WET_WATER	1
 #define TURF_WET_LUBE	2
+#define TURF_WET_ICE	3
 
 //Object/Item sharpness
 #define IS_BLUNT			0
@@ -289,3 +293,71 @@ var/list/bloody_footprints_cache = list()
 #define DYNAMIC_LIGHTING_ENABLED 1 //dynamic lighting enabled
 #define DYNAMIC_LIGHTING_IFSTARLIGHT 2 //dynamic lighting enabled only if starlight is.
 #define IS_DYNAMIC_LIGHTING(A) ( A.lighting_use_dynamic == DYNAMIC_LIGHTING_IFSTARLIGHT ? config.starlight : A.lighting_use_dynamic )
+
+//subtypesof(), typesof() without the parent path
+#define subtypesof(typepath) ( typesof(typepath) - typepath )
+
+//Bot types
+#define SEC_BOT				1	// Secutritrons (Beepsky) and ED-209s
+#define MULE_BOT			2	// MULEbots
+#define FLOOR_BOT			4	// Floorbots
+#define CLEAN_BOT			8	// Cleanbots
+#define MED_BOT				16	// Medibots
+
+//Sentience types
+#define SENTIENCE_ORGANIC 1
+#define SENTIENCE_ARTIFICIAL 2
+#define SENTIENCE_OTHER 3
+
+//Fire stuff, for burn_state
+#define LAVA_PROOF -2
+#define FIRE_PROOF -1
+#define FLAMMABLE 0
+#define ON_FIRE 1
+
+
+//Ghost orbit types:
+#define GHOST_ORBIT_CIRCLE		"circle"
+#define GHOST_ORBIT_TRIANGLE	"triangle"
+#define GHOST_ORBIT_HEXAGON		"hexagon"
+#define GHOST_ORBIT_SQUARE		"square"
+#define GHOST_ORBIT_PENTAGON	"pentagon"
+
+//Bloodcrawling
+#define BLOODCRAWL 1
+#define BLOODCRAWL_EAT 2
+
+//Color Defines
+#define OOC_COLOR  "#002eb8"
+
+/////////////////////////////////////
+// atom.appearence_flags shortcuts //
+/////////////////////////////////////
+// Disabling certain features
+#define APPEARANCE_IGNORE_TRANSFORM			RESET_TRANSFORM
+#define APPEARANCE_IGNORE_COLOUR			RESET_COLOR
+#define	APPEARANCE_IGNORE_CLIENT_COLOUR		NO_CLIENT_COLOR
+#define APPEARANCE_IGNORE_COLOURING			RESET_COLOR|NO_CLIENT_COLOR
+#define APPEARANCE_IGNORE_ALPHA				RESET_ALPHA
+#define APPEARANCE_NORMAL_GLIDE				~LONG_GLIDE
+
+// Enabling certain features
+#define APPEARANCE_CONSIDER_TRANSFORM		~RESET_TRANSFORM
+#define APPEARANCE_CONSIDER_COLOUR			~RESET_COLOUR
+#define APPEARANCE_CONSIDER_CLIENT_COLOUR	~NO_CLIENT_COLOR
+#define APPEARANCE_CONSIDER_COLOURING		~RESET_COLOR|~NO_CLIENT_COLOR
+#define APPEARANCE_CONSIDER_ALPHA			~RESET_ALPHA
+#define APPEARANCE_LONG_GLIDE				LONG_GLIDE
+
+// Consider these images/atoms as part of the UI/HUD
+#define APPEARANCE_UI_IGNORE_ALPHA			RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR|RESET_ALPHA
+#define APPEARANCE_UI						RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR
+
+//Launching Shuttles to Centcomm
+#define NOLAUNCH -1
+#define UNLAUNCHED 0
+#define ENDGAME_LAUNCHED 1
+#define EARLY_LAUNCHED 2
+
+//Just space
+#define SPACE_ICON_STATE	"[((x + y) ^ ~(x * y) + z) % 25]"

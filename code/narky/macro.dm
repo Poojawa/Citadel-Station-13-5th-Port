@@ -1,3 +1,4 @@
+*/
 var/const/SIZEPLAY_TINY=1
 var/const/SIZEPLAY_MICRO=2
 var/const/SIZEPLAY_NORMAL=3

@@ -16,16 +16,6 @@
 
 #define isalienadult(A) (istype(A, /mob/living/carbon/alien/humanoid))
 
-#define isalienhunter(A) (istype(A, /mob/living/carbon/alien/humanoid/hunter))
-
-#define isaliendrone(A) (istype(A, /mob/living/carbon/alien/humanoid/drone))
-
-#define isaliensentinel(A) (istype(A, /mob/living/carbon/alien/humanoid/sentinel))
-
-#define isalienroyal(A) (istype(A, /mob/living/carbon/alien/humanoid/royal))
-
-#define isalienravager(A) (istype(A, /mob/living/carbon/alien/humanoid/ravager))
-
 #define islarva(A) (istype(A, /mob/living/carbon/alien/larva))
 
 #define isslime(A) (istype(A, /mob/living/simple_animal/slime))
@@ -71,6 +61,10 @@
 #define isguardian(A) (istype(A, /mob/living/simple_animal/hostile/guardian))
 
 #define islimb(A) (istype(A, /obj/item/organ/limb))
+
+#define isbot(A) (istype(A, /mob/living/simple_animal/bot))
+
+#define ismovableatom(A) (istype(A, /atom/movable))
 
 // ASSEMBLY HELPERS
 

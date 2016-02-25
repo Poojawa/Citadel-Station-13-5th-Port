@@ -8,14 +8,13 @@
 	item_state = "chain"
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
-	damtype = "stamina"
 	force = 10
 	throwforce = 7
 	w_class = 3
 	origin_tech = "combat=4"
 	attack_verb = list("flogged", "whipped", "lashed", "disciplined")
-	hitsound = 'sound/weapons/flog.ogg'
-	needs_permit = 0
+	hitsound = 'sound/weapons/slash.ogg' //pls replace
+	materials = list(MAT_METAL = 1000)
 
 /obj/item/weapon/melee/chainofcommand/suicide_act(mob/user)
 		user.visible_message("<span class='suicide'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -57,6 +56,10 @@
 			if(!isrobot(target)) return
 		else
 			if(cooldown <= 0)
+				if(ishuman(target))
+					var/mob/living/carbon/human/H = target
+					if (H.check_shields(0, "[user]'s [name]", src, MELEE_ATTACK))
+						return
 				playsound(get_turf(src), 'sound/effects/woodhit.ogg', 75, 1, -1)
 				target.Weaken(3)
 				add_logs(user, target, "stunned", src)
@@ -140,6 +143,7 @@
 	armour_penetration = 1000
 	var/obj/machinery/power/supermatter_shard/shard
 	var/balanced = 1
+	origin_tech = "combat=5;materials=6"
 
 /obj/item/weapon/melee/supermatter_sword/New()
 	..()
@@ -207,27 +211,14 @@
 		consume_turf(target)
 
 /obj/item/weapon/melee/supermatter_sword/proc/consume_turf(turf/T)
+	if(istype(T, T.baseturf))
+		return //Can't void the void, baby!
 	playsound(T, 'sound/effects/supermatter.ogg', 50, 1)
 	T.visible_message("<span class='danger'>\The [T] smacks into \the [src] and rapidly flashes to ash.</span>",\
 	"<span class='italics'>You hear a loud crack as you are washed with a wave of heat.</span>")
 	shard.Consume()
-	T.ChangeTurf(/turf/space)
+	T.ChangeTurf(T.baseturf)
 	T.CalculateAdjacentTurfs()
 
-/obj/item/weapon/hatchet/viking
-	name = "viking hatchet"
-	desc = "TO VALHALLA!"
-	icon_state = "waraxe"
-	item_state = "waraxe"
-	force = 24
-	throwforce = 30
-	throw_speed = 3
-	throw_range = 7
-	w_class = 3
-	flags = CONDUCT
-	slot_flags = SLOT_BELT
-
-/obj/item/weapon/hatchet/viking/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] is chopping \his own head off with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
-	return (BRUTELOSS)
+/obj/item/weapon/melee/supermatter_sword/add_blood()
+	return

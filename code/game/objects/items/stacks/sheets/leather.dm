@@ -5,6 +5,21 @@
 	icon_state = "sheet-hide"
 	origin_tech = null
 
+var/global/list/datum/stack_recipe/human_recipes = list( \
+	new/datum/stack_recipe("bloated human costume", /obj/item/clothing/suit/hooded/bloated_human, 5, on_floor = 1), \
+	)
+
+/obj/item/stack/sheet/animalhide/human/New(var/loc, var/amount=null)
+	recipes = human_recipes
+	return ..()
+
+/obj/item/stack/sheet/animalhide/generic
+	name = "generic skin"
+	desc = "A piece of generic skin."
+	singular_name = "generic skin piece"
+	icon_state = "sheet-hide"
+	origin_tech = null
+
 /obj/item/stack/sheet/animalhide/corgi
 	name = "corgi hide"
 	desc = "The by-product of corgi farming."
@@ -50,9 +65,15 @@ var/global/list/datum/stack_recipe/monkey_recipes = list ( \
 	icon_state = "sheet-lizard"
 	origin_tech = null
 
+/obj/item/stack/sheet/animalhide/xeno
+	name = "alien hide"
+	desc = "The skin of a terrible creature."
+	singular_name = "alien hide piece"
+	icon_state = "sheet-xeno"
+	origin_tech = null
 
 var/global/list/datum/stack_recipe/xeno_recipes = list ( \
-	new/datum/stack_recipe("alien hat", /obj/item/clothing/head/xenos, 1, on_floor = 1), \
+	new/datum/stack_recipe("alien helmet", /obj/item/clothing/head/xenos, 1, on_floor = 1), \
 	new/datum/stack_recipe("alien suit", /obj/item/clothing/suit/xenos, 2, on_floor = 1), \
 	)
 
@@ -67,6 +88,13 @@ var/global/list/datum/stack_recipe/xeno_recipes = list ( \
 	singular_name = "alien hide piece"
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "chitin"
+	origin_tech = null
+
+/obj/item/xenos_claw
+	name = "alien claw"
+	desc = "The claw of a terrible creature."
+	icon = 'icons/mob/alien.dmi'
+	icon_state = "claw"
 	origin_tech = null
 
 /obj/item/weed_extract
